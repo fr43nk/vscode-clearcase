@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import {exec} from 'child_process';
 import {ccConfigHandler} from './ccConfigHandler';
 import {ClearCase} from './clearcase';
+import {ccQuickPickItem} from './ccQuickPickItem'
 
 export class UIInformation
 {
@@ -21,6 +22,43 @@ export class UIInformation
 
 	public createStatusbarItem()
 	{
+		let l_ccCmds: ccQuickPickItem[] = [];
+		vscode.commands.getCommands(true).then((commands) => {
+			for(let i=0; i< commands.length; i++)
+			{
+				if( commands[i].startsWith("extension.cc") === true )
+				{
+					switch(commands[i])
+					{
+						case "extension.ccComparePrevious":
+						{
+							l_ccCmds.push(new ccQuickPickItem("Compare to previous version", commands[i]));
+							break;
+						}
+						case "extension.ccVersionTree":
+						{
+							l_ccCmds.push(new ccQuickPickItem("Show version tree", commands[i]));
+							break;
+						}
+						case "extension.ccExplorer":
+						{
+							l_ccCmds.push(new ccQuickPickItem("Open clearcase explorer", commands[i]));
+							break;
+						}
+					}
+				}
+			}
+			this.m_context.subscriptions.push(vscode.commands.registerCommand('extension.showstatusbarcmds', () => {
+				vscode.window.showQuickPick(l_ccCmds).then((cmd) => {
+					if(cmd && cmd.description !== "")
+					{
+						vscode.commands.executeCommand(cmd.description);
+					}
+				});
+			}, this));
+			this.m_statusbar.command = "extension.showstatusbarcmds";
+			
+		});
 		this.m_statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
 	}
 
