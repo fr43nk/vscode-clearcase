@@ -22,44 +22,16 @@ export class UIInformation
 
 	public createStatusbarItem()
 	{
-		let l_ccCmds: ccQuickPickItem[] = [];
-		vscode.commands.getCommands(true).then((commands) => {
-			for(let i=0; i< commands.length; i++)
-			{
-				if( commands[i].startsWith("extension.cc") === true )
-				{
-					switch(commands[i])
-					{
-						case "extension.ccComparePrevious":
-						{
-							l_ccCmds.push(new ccQuickPickItem("Compare to previous version", commands[i]));
-							break;
-						}
-						case "extension.ccVersionTree":
-						{
-							l_ccCmds.push(new ccQuickPickItem("Show version tree", commands[i]));
-							break;
-						}
-						case "extension.ccExplorer":
-						{
-							l_ccCmds.push(new ccQuickPickItem("Open clearcase explorer", commands[i]));
-							break;
-						}
-					}
-				}
-			}
-			this.m_context.subscriptions.push(vscode.commands.registerCommand('extension.showstatusbarcmds', () => {
-				vscode.window.showQuickPick(l_ccCmds).then((cmd) => {
-					if(cmd && cmd.description !== "")
-					{
-						vscode.commands.executeCommand(cmd.description);
-					}
-				});
-			}, this));
-			this.m_statusbar.command = "extension.showstatusbarcmds";
-			
-		});
 		this.m_statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+		this.m_context.subscriptions.push(vscode.commands.registerCommand('extension.showstatusbarcmds', () => {
+			vscode.window.showQuickPick(this.getQuickPicItems()).then((cmd) => {
+				if(cmd && cmd.description !== "")
+				{
+					vscode.commands.executeCommand(cmd.description);
+				}
+			});
+		}, this));
+		this.m_statusbar.command = "extension.showstatusbarcmds";
 	}
 
 	public bindEvents()
@@ -134,10 +106,17 @@ export class UIInformation
 		this.m_clearcase.getVersionInformation(iUri).then((value) => {
 			this.updateStatusbar(value);
 		}).catch((error) => {
-			this.updateStatusbar(error);
+			this.updateStatusbar("");
 		});
 	}
 
+	/**
+	 * Writes a version string to the statusbar item.
+	 * If the given string is empty the version is view private if the workspace
+	 * is a clearcase view.
+	 * 
+	 * @param iFileInfo version string
+	 */
 	public updateStatusbar(iFileInfo:string)
 	{
 		if( iFileInfo !== undefined )
@@ -159,6 +138,49 @@ export class UIInformation
 		{
 			this.m_statusbar.hide();
 		}
+	}
+
+	/**
+	 * Returns a QuickPickItem list which contains some usefull commands
+	 */
+	public getQuickPicItems(): Thenable<ccQuickPickItem[]>
+	{
+		let l_ccCmds: ccQuickPickItem[] = [];
+		let l_p = new Promise<ccQuickPickItem[]>((resolve, reject) => {
+			if( this.m_clearcase.IsClearcaseObject === false )
+				resolve([]);
+			else
+			{
+				vscode.commands.getCommands(true).then((commands) => {
+					for(let i=0; i< commands.length; i++)
+					{
+						if( commands[i].startsWith("extension.cc") === true )
+						{
+							switch(commands[i])
+							{
+								case "extension.ccComparePrevious":
+								{
+									l_ccCmds.push(new ccQuickPickItem("Compare to previous version", commands[i]));
+									break;
+								}
+								case "extension.ccVersionTree":
+								{
+									l_ccCmds.push(new ccQuickPickItem("Show version tree", commands[i]));
+									break;
+								}
+								case "extension.ccExplorer":
+								{
+									l_ccCmds.push(new ccQuickPickItem("Open clearcase explorer", commands[i]));
+									break;
+								}
+							}
+						}
+					}
+					resolve(l_ccCmds);
+				});
+			}
+		});
+		return l_p;
 	}
 
 	public dispose()
