@@ -1,4 +1,4 @@
-import { workspace } from "vscode";
+import { workspace } from 'vscode';
 
 export class MappedList {
   private m_untrackedList: Map<string, string[]>;
@@ -16,11 +16,12 @@ export class MappedList {
   public exists(i_val: string): boolean {
     if (this.m_untrackedList !== null) {
       const keys = this.m_untrackedList.keys();
-      for (let key of keys) {
+      for (const key of keys) {
         if (i_val.indexOf(key) > -1) {
-          let v = this.m_untrackedList.get(key);
-          if( v.indexOf(i_val) > -1 )
+          const v = this.m_untrackedList.get(key);
+          if ( v.indexOf(i_val) > -1 ) {
             return true;
+          }
         }
       }
     }
@@ -36,7 +37,7 @@ export class MappedList {
         }
       }
       if (i < workspace.workspaceFolders.length) {
-        let v = this.m_untrackedList.get(workspace.workspaceFolders[i].uri.fsPath);
+        const v = this.m_untrackedList.get(workspace.workspaceFolders[i].uri.fsPath);
         v.push(i_val);
         this.m_untrackedList.set(workspace.workspaceFolders[i].uri.fsPath, v);
       }
@@ -46,7 +47,7 @@ export class MappedList {
   public addStringByKey(i_val: string, i_key: string) {
     if (this.m_untrackedList !== null) {
       if (this.m_untrackedList.get(i_key) !== undefined) {
-        let v = this.m_untrackedList.get(i_key);
+        const v = this.m_untrackedList.get(i_key);
         if (v.indexOf(i_val) === -1) {
           v.push(i_val);
           this.m_untrackedList.set(i_key, v);

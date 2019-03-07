@@ -1,13 +1,12 @@
-import { workspace, WorkspaceFolder, Uri, EventEmitter } from "vscode";
-import { existsSync, readFileSync } from "fs";
-import { join, dirname } from "path";
-import ignore from "ignore";
-import { Model, ModelHandler } from "./model";
+import { existsSync, readFileSync } from 'fs';
+import ignore from 'ignore';
+import { dirname, join } from 'path';
+import { EventEmitter, Uri, workspace, WorkspaceFolder } from 'vscode';
+import { Model, ModelHandler } from './model';
 
-export class IgnoreHandler {
+export class CCIgnoreHandler {
   private fileIgnores: FileIgnore[];
   private m_onFilterRefreshed: EventEmitter<void>;
-
 
   constructor(private m_fsWatch: ModelHandler) {
     this.m_onFilterRefreshed = new EventEmitter<void>();
@@ -17,11 +16,11 @@ export class IgnoreHandler {
   get OnFilterRefreshed(): EventEmitter<void> {
     return this.m_onFilterRefreshed;
   }
-  
+
   public init() {
     this.fileIgnores = [];
     workspace.workspaceFolders.forEach((folder: WorkspaceFolder) => {
-      let l_m = this.m_fsWatch.addWatcher(join(folder.uri.fsPath, '.ccignore'));
+      const l_m = this.m_fsWatch.addWatcher(join(folder.uri.fsPath, '.ccignore'));
       l_m.onWorkspaceChanged(this.refreshFilter, this);
       l_m.onWorkspaceCreated(this.refreshFilter, this);
       l_m.onWorkspaceDeleted(this.removeFilter, this);
@@ -30,23 +29,24 @@ export class IgnoreHandler {
   }
 
   public getFolderIgnore(path: Uri | string): FileIgnore | null {
-    for (let i = 0; i < this.fileIgnores.length; i++) {
-      if (typeof path == "string") {
-        if (path.indexOf(this.fileIgnores[i].Path.fsPath) == 0 && this.fileIgnores[i].HasIgnore === true)
-          return this.fileIgnores[i];
-      }
-      else {
-        if (path.fsPath.indexOf(this.fileIgnores[i].Path.fsPath) == 0 && this.fileIgnores[i].HasIgnore === true)
-          return this.fileIgnores[i];
+    for (const fileIgnore of this.fileIgnores) {
+      if (typeof path === 'string') {
+        if (path.indexOf(fileIgnore.Path.fsPath) === 0 && fileIgnore.HasIgnore === true) {
+          return fileIgnore;
+        }
+      } else {
+        if (path.fsPath.indexOf(fileIgnore.Path.fsPath) === 0 && fileIgnore.HasIgnore === true) {
+          return fileIgnore;
+        }
       }
     }
     return null;
   }
 
-  public refreshFilter(fileObj:Uri) {
+  public refreshFilter(fileObj: Uri) {
     const dir = dirname(fileObj.fsPath);
     for (let i = 0; i < this.fileIgnores.length; i++) {
-      if(this.fileIgnores[i].Path.fsPath == dir) {
+      if (this.fileIgnores[i].Path.fsPath === dir) {
         this.fileIgnores[i] = new FileIgnore(Uri.file(dir));
         this.m_onFilterRefreshed.fire();
         return;
@@ -56,10 +56,10 @@ export class IgnoreHandler {
     this.m_onFilterRefreshed.fire();
   }
 
-  public removeFilter(fileObj:Uri) {
+  public removeFilter(fileObj: Uri) {
     const dir = dirname(fileObj.fsPath);
     for (let i = 0; i < this.fileIgnores.length; i++) {
-      if(this.fileIgnores[i].Path.fsPath == dir) {
+      if (this.fileIgnores[i].Path.fsPath === dir) {
         this.fileIgnores.splice(i, 1);
         this.m_onFilterRefreshed.fire();
         return;
@@ -79,8 +79,8 @@ export class FileIgnore {
   public init(path: Uri) {
     this.ignore = ignore();
     this.path = path;
-    let p = join(path.fsPath, ".ccignore");
-    if (existsSync(p) == true) {
+    const p = join(path.fsPath, '.ccignore');
+    if (existsSync(p) === true) {
       this.hasIgnore = true;
       this.ignore.add(readFileSync(p).toString());
     }

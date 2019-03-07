@@ -6,6 +6,11 @@
         "lib": [
             "es6"
         ],
+        "plugins": [
+            {
+                "name": "typescript-tslint-plugin"
+            }
+        ],
         "sourceMap": true,
         "rootDir": ".",
         "experimentalDecorators": true

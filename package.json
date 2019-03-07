@@ -18,7 +18,7 @@
         "vscode": "^1.31.0"
     },
     "categories": [
-        "Languages",
+        "Programming Languages",
         "Other"
     ],
     "keywords": [
@@ -440,6 +440,8 @@
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
         "compile": "tsc -watch -p ./",
+        "lint": "npx tslint -p ./",
+        "lint:fix": "npx tslint --fix -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "dependencies": {
@@ -450,11 +452,12 @@
         "vscode-nls": "^4.0.0"
     },
     "devDependencies": {
+        "@types/fs-promise": "^1.0.3",
         "@types/mocha": "^2.2.32",
         "@types/node": "^6.14.2",
-        "@types/fs-promise": "^1.0.3",
         "@types/tmp": "0.0.34",
         "mocha": "^5.2.0",
+        "tslint": "^5.13.1",
         "typescript": "^2.9.2",
         "vscode": "^1.1.29",
         "vscode-nls-dev": "^2.1.2"
