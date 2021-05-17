@@ -2,7 +2,7 @@
   "name": "vscode-clearcase",
   "displayName": "Unofficial ClearCase SCM Commands",
   "description": "Unofficial support for IBM Rational ClearCase most common commands",
-  "version": "2.6.0",
+  "version": "3.0.0-beta.4",
   "publisher": "OpenNingia",
   "license": "MIT",
   "repository": {
@@ -13,9 +13,9 @@
       "color": "#FF524C",
       "theme": "dark"
   },
-  "icon": "./src/Assets/images/icon.png",
+  "icon": "Assets/images/icon.png",
   "engines": {
-      "vscode": "^1.39.0"
+      "vscode": "^1.56.0"
   },
   "categories": [
       "Programming Languages",
@@ -53,8 +53,8 @@
         "title": "Checkin All",
         "category": "Clearcase",
         "icon": {
-          "light": "./src/Assets/icons/light/check.svg",
-          "dark": "./src/Assets/icons/dark/check.svg"
+          "light": "./Assets/icons/light/check.svg",
+          "dark": "./Assets/icons/dark/check.svg"
         }
       },
       {
@@ -92,8 +92,8 @@
         "title": "Update View",
         "category": "Clearcase",
         "icon": {
-          "light": "./src/Assets/icons/light/refresh.svg",
-          "dark": "./src/Assets/icons/dark/refresh.svg"
+          "light": "./Assets/icons/light/refresh.svg",
+          "dark": "./Assets/icons/dark/refresh.svg"
         }
       },
       {
@@ -111,8 +111,8 @@
         "title": "Refresh checkedout file list",
         "category": "Clearcase",
         "icon": {
-          "light": "./src/Assets/icons/light/open-change-head.svg",
-          "dark": "./src/Assets/icons/dark/open-change-head.svg"
+          "light": "./Assets/icons/light/open-change-head.svg",
+          "dark": "./Assets/icons/dark/open-change-head.svg"
         }
       },
       {
@@ -120,8 +120,8 @@
         "title": "Edit config spec",
         "category": "Clearcase",
         "icon": {
-          "light": "./src/Assets/icons/light/icon-repo.svg",
-          "dark": "./src/Assets/icons/dark/icon-repo.svg"
+          "light": "./Assets/icons/light/icon-repo.svg",
+          "dark": "./Assets/icons/dark/icon-repo.svg"
         }
       },
       {
@@ -129,8 +129,8 @@
         "title": "Refresh view private file list",
         "category": "Clearcase",
         "icon": {
-          "light": "./src/Assets/icons/light/open-change-base.svg",
-          "dark": "./src/Assets/icons/dark/open-change-base.svg"
+          "light": "./Assets/icons/light/open-change-base.svg",
+          "dark": "./Assets/icons/dark/open-change-base.svg"
         }
       },
       {
@@ -437,6 +437,11 @@
           "type": "string",
           "default": "c:\\Temp",
           "description": "The temp dir used for file operations"
+        },
+        "vscode-clearcase.uncoKeepFile": {
+          "type": "boolean",
+          "default": "true",
+          "description": "Keep unchecked out files in current directory"
         }
       }
     },

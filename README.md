@@ -1,70 +1,55 @@
-# vscode-clearcase-scm README
+# VS Code ClearCase
 
-This is the README for your extension "vscode-clearcase-scm". After writing up a brief description, we recommend including the following sections.
+This repository contains the extension for [IBM Rational ClearCase SCM](http://www-03.ibm.com/software/products/en/clearcase) for the [VS Code](https://code.visualstudio.com) editor.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Clearcase commands exposed by this extensions:
 
-For example if there is an image subfolder under your extension project workspace:
+    * Launch ClearCase Explorer
+    * Checkout
+    * Checkin
+    * Undo Checkout
+    * Version Tree
+    * Compare with previous version
+    * Find Checkouts
+    * Find modified files
+    * Update snapshot
+    * Item Properties
+    * Annotate
+    * Set current Activity
 
-\!\[feature X\]\(images/feature-x.png\)
+### GUI
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+   * Automatically checkout on save if file isn't checked out.
+   * Show view private and checkedout files in SCM view
+   * Show version of current file in the status bar. This can be disabled via the user setting
+
+     ```TypeScript
+     vscode-clearcase.showVersionInStatusbar = false
+     ```
+
+   * Annotate code lens is customizable via these user settings
+
+     ```TypeScript
+     vscode-clearcase.annotationColor = rgba(220, 220, 220, 0.8)
+     vscode-clearcase.annotationBackgroundColor = rgba(20, 20, 20, 0.8)
+     vscode-clearcase.annotationFormatString = "%d %12u"
+     ```
+
+     Format string is documented at https://www.ibm.com/support/knowledgecenter/SSSH27_8.0.0/com.ibm.rational.clearcase.cc_ref.doc/topics/fmt_ccase.htm
+
+   * Syntax highlighting for ClearCase config-spec files
+
+## WSL
+
+You can use this extenion in a WSL environment and a windows clearcase installation. Just make sure the configured **executeable** ist the windows one (this is the default). The second important setting is the **tempDir** value. If you use a windows cleartool binary the temp dir needs to be a windows style path as already set by default. This path needs to be reachable by the windows cleartool executable. Therefor it is not possible to use a wsl linux only path like `/tmp/`.
+
+If the above settings are correct everything else is handled by the extension transparantly.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+A valid ClearCase installation within the system's PATH or a valid executable path setup in the **extension** preferences value.
 
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## License
+[MIT](LICENSE)

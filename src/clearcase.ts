@@ -165,7 +165,7 @@ export class ClearCase {
     } else {
 
       let comment = "";
-      let cmdOpts = coArgTmpl.split(' ');
+      let cmdOpts = coArgTmpl.trim().split(/\s+/);
       let idx = cmdOpts.indexOf("${comment}");
       if (idx > -1) {
         if (defComment)
@@ -269,7 +269,7 @@ export class ClearCase {
     } else {
 
       let comment = "";
-      let cmdOpts = ciArgTmpl.split(' ');
+      let cmdOpts = ciArgTmpl.trim().split(/\s+/);
       let idx = cmdOpts.indexOf("${comment}");
       if (idx > -1) {
 
@@ -354,17 +354,19 @@ export class ClearCase {
       let cmdOpts = lscoArgTmpl.split(' ');
       let cmd: CCArgs = new CCArgs(["lsco", ...cmdOpts]);
       await this.runCleartoolCommand(cmd, wsf, null, (result: string) => {
-        let results: string[] = result.split(/\r\n|\r|\n/);
-        resNew =  results.map((e) => {
-          if (e.startsWith("\\") && type() === "Windows_NT") {
-            e = (e.replace("\\", wsf.toUpperCase()[0] + ":\\"));
-          }
-          if(runInWsl === true) {
-            // e = this.wslPath(e, true, runInWsl);
-            e = e.replace(/\\/g, '/').replace(/^([A-Za-z])\:/, (s:string, g1:string) => `/mnt/${g1.toLowerCase()}`);
-          }
-          return e;
-        });
+        if( result.length > 0 ) {
+          let results: string[] = result.trim().split(/\r\n|\r|\n/);
+          resNew =  results.map((e) => {
+            if (e.startsWith("\\") && type() === "Windows_NT") {
+              e = (e.replace("\\", wsf.toUpperCase()[0] + ":\\"));
+            }
+            if(runInWsl === true) {
+              // e = this.wslPath(e, true, runInWsl);
+              e = e.replace(/\\/g, '/').replace(/^([A-Za-z])\:/, (s:string, g1:string) => `/mnt/${g1.toLowerCase()}`);
+            }
+            return e;
+          });
+        }
       });
     }
     catch (error) {

@@ -47,6 +47,7 @@ export class ccConfigHandler {
 			this.setChangeConfigDate<string>(config, "viewPrivateFileSuffixes", this.m_configuration.ViewPrivateFileSuffixes);
 			this.setChangeConfigDate<string>(config, "executable", this.m_configuration.Executable);
 			this.setChangeConfigDate<string>(config, "tempDir", this.m_configuration.TempDir);
+			this.setChangeConfigDate<boolean>(config, "uncoKeepFile", this.m_configuration.UncoKeepFile);
 			return true;
 		}
 		return false;
